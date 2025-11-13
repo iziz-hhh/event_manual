@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WTW Event 管理システム - 管理者向け運用マニュアル</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px 60px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .header .version {
+            font-size: 14px;
+            color: #999;
+            margin-top: 10px;
+        }
+        
+        .toc {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px 30px;
+            margin-bottom: 40px;
+        }
+        
+        .toc h2 {
+            font-size: 20px;
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .toc ol {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .toc a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            page-break-inside: avoid;
+        }
+        
+        .section h2 {
+            font-size: 28px;
+            color: #1e40af;
+            border-left: 5px solid #2563eb;
+            padding-left: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .section h3 {
+            font-size: 22px;
+            color: #1e40af;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .section h4 {
+            font-size: 18px;
+            color: #334155;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: #475569;
+        }
+        
+        .note {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .note strong {
+            color: #b45309;
+        }
+        
+        .important {
+            background-color: #fee2e2;
+            border-left: 4px solid #dc2626;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .important strong {
+            color: #991b1b;
+        }
+        
+        .tip {
+            background-color: #dbeafe;
+            border-left: 4px solid #2563eb;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .tip strong {
+            color: #1e40af;
+        }
+        
+        .screenshot-placeholder {
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 60px 20px;
+            margin: 25px 0;
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .screenshot-placeholder::before {
+            content: "📷 ";
+            font-size: 24px;
+        }
+        
+        ol, ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 10px;
+            color: #475569;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 45px;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: #2563eb;
+            color: white;
+            font-weight: bold;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f8fafc;
+            color: #1e40af;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        code {
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #dc2626;
+        }
+        
+        .footer {
+            border-top: 2px solid #e2e8f0;
+            margin-top: 50px;
+            padding-top: 20px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+            
+            .toc {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src=".\wtw_sub.png"height="20px">
+            <h1>イベント管理ツール</h1>
+            <div class="subtitle">管理者向け運用マニュアル（完全版）</div>
+            <div class="version">Version 2.5.0 | 最終更新日: 2025年11月</div>
+        </div>
+        <img src=".\BG.png"height="330px">
+        <div class="toc">
+            <h2>目次</h2>
+            <ol>
+                <li><a href="#overview">システム概要</a></li>
+                <li><a href="#login">ログインとパスワード管理</a></li>
+                <li><a href="#dashboard">ダッシュボード概要</a></li>
+                <li><a href="#staff-management">スタッフ管理</a>
+                    <ol style="margin-left: 20px;">
+                        <li><a href="#staff-register">スタッフ登録（個別）</a></li>
+                        <li><a href="#staff-csv">CSV一括登録</a></li>
+                        <li><a href="#staff-edit">スタッフ情報編集（タブ式）</a></li>
+                        <li><a href="#staff-profile-image">プロフィール画像設定</a></li>
+                        <li><a href="#staff-rank">ランクシステム</a></li>
+                    </ol>
+                </li>
+                <li><a href="#project-management">案件管理</a>
+                    <ol style="margin-left: 20px;">
+                        <li><a href="#project-create">案件作成</a></li>
+                        <li><a href="#project-payment-types">支払いタイプ（日給・時給）</a></li>
+                        <li><a href="#project-schedule">スケジュール設定（シンプル・カスタムモード）</a></li>
+                        <li><a href="#project-edit">案件編集</a></li>
+                        <li><a href="#project-assign">スタッフアサイン</a></li>
+                        <li><a href="#project-confirm">案件確定</a></li>
+                    </ol>
+                </li>
+                <li><a href="#entry-management">エントリー管理</a></li>
+                <li><a href="#work-reports">終了報告の確認・承認</a></li>
+                <li><a href="#sales-report">売上レポート</a></li>
+                <li><a href="#other-features">その他の機能</a></li>
+                <li><a href="#faq">よくある質問</a></li>
+            </ol>
+        </div>
+        
+        <div class="section" id="overview">
+            <h2>1. システム概要</h2>
+            
+            <p>WTW Event管理システム(仮名)は、リアルイベントに特化したスタッフ・案件管理ツールです。プロ◯ャスのような固有の名称を募集中です。</p>
+            
+            <h3>主な特徴</h3>
+            <ul>
+                <li><strong>多段階登録システム：</strong> 基本情報での簡易登録(面接時点)と、マイページでの詳細プロフィール完成</li>
+                <li><strong>柔軟な支払い管理：</strong> 日給（日数×単価）と時給（時間×単価）の両方に対応</li>
+                <li><strong>役職レベルのスケジューリング：</strong> D・ADなど各役職ごとに異なる日程・時間を設定可能</li>
+                <li><strong>スタッフランクシステム：</strong> 稼働日数に基づく5段階のランク管理（ブルー、ブロンズ、シルバー、ゴールド、プラチナ）</li>
+                <li><strong>エントリーシステム：</strong> スタッフ自身が案件にエントリーし、管理者が承認</li>
+                <li><strong>経費管理：</strong> 交通費・その他経費の詳細追跡と領収書管理</li>
+                <li><strong>包括的なレポート：</strong> 月次売上レポートとCSVエクスポート機能、将来的に各スタッフの統計などにも対応。</li>
+            </ul>
+        </div>
+        
+        <div class="section" id="login">
+            <h2>2. ログインとパスワード管理</h2>
+            
+            <h3>2.1 ログイン</h3>
+            <ol class="step-list">
+                <li>ブラウザでシステムのURLにアクセスします</li>
+                <li>ユーザー名またはメールアドレスを入力します</li>
+                <li>パスワードを入力します</li>
+                <li>「ログイン」ボタンをクリックします</li>
+            </ol>
+            
+            
+                <img src=".\new_login.png"height="495px">
+            <s>時間をかけた</s>こだわりのログイン画面は美しいパーティクルアニメーションに加えて「WEST THE WEBINAR」のアルファベットが浮遊しています。更にマウスカーソルを動かすと...
+            
+            <div class="important">
+                <strong>重要：</strong> 初回ログイン時、デフォルトの管理者アカウントは <code>ID:admin</code> <code>PW:admin</code> です。セキュリティのため、後にこのアカウントは削除されます。
+            </div>
+            
+            <div class="note">
+                <strong>備考：</strong> 管理者側で作成されたスタッフアカウントは初期パスワード <code>PW:wtwst</code>が設定されます。初回ログイン後に自動的にパスワード変更を案内します。
+            </div>
+                
+            
+            <h3>2.2 パスワード管理</h3>
+            
+            
+            <h4>スタッフ自身によるパスワード変更</h4>
+            <p>スタッフは、マイページから自分でパスワードを変更できます。</p>
+            
+            <ol class="step-list">
+                <li>ログイン画面で「パスワードをお忘れの方」を押す</li>
+                <li>登録しているメールアドレスを入力する。</li>
+                <img src=".\pw_reset.png" height="295px">
+                <li>メールアドレスに紐づけられたアカウントが存在した場合にリセットメールが送信される。</li>
+                <img src=".\pw_preview.png" height="295px">
+                <li>メールに記載のURLを開いて新しいパスワードを入力します</li>
+                <img src=".\mail.jpg" height="295px">
+                <li>「変更」ボタンで確定します</li>
+            </ol>
+            
+            <div class="note">
+                <strong>備考：</strong> 専用のメールアドレス<code>event.tool.wtw@gmail.com</code>をシステムと連携して送信していますがレスポンスが悪い場合がありメールがすぐに届かないことがあります。リセットメールに記載のURLは15分間有効。
+            </div>
+        </div>
+        
+        <div class="section" id="dashboard">
+            <h2>3. ダッシュボード概要</h2>
+            
+            <p>管理者アカウントでログイン後、管理者ダッシュボードが表示されます。ここから各種管理機能にアクセスできます。</p>
+            <img src=".\topmenu.png" height="495px">
+            
+            <h3>主要メニュー</h3>
+            <table>
+                <tr>
+                    <th>メニュー項目</th>
+                    <th>説明</th>
+                </tr>
+                <tr>
+                    <td>案件管理</td>
+                    <td>案件の作成、編集、スタッフのアサイン、状態管理、カレンダー表示</td>
+                </tr>
+                <tr>
+                    <td>スタッフ管理</td>
+                    <td>スタッフの登録、編集、ランク管理、CSV一括登録、プロフィール画像設定</td>
+                </tr>
+                <tr>
+                    <td>DM管理</td>
+                    <td>スタッフからのDM一覧</td>
+                    
+                </tr>
+                <tr>
+                    <td>終了報告</td>
+                    <td>業務終了後の報告内容の確認と承認、経費詳細の確認</td>
+                </tr>
+                <tr>
+                    <td>売上レポート</td>
+                    <td>月次売上レポートの生成、案件別・役職別の支払額確認、CSVエクスポート</td>
+                </tr>
+                <tr>
+                    <td>LINE管理</td>
+                    <td>公式LINEへの素早いアクセス(埋め込み表示には対応していませんでした)</td>
+                </tr>
+            </table>
+            <div class="note">
+               <strong>今後のアップデート予定：</strong> DM機能は既に使用可能状態ではありますが通知機能がないため公式LINEがある限りは推奨されていません。
+            </div>
+        </div>
+        
+        <div class="section" id="staff-management">
+            <h2>4. スタッフ管理</h2>
+            
+            <h3 id="staff-register">4.1 スタッフ登録（個別）</h3>
+            
+            <ol class="step-list">
+                <li>サイドメニューから「スタッフ管理」をクリックします</li>
+                <li>画面右上の「スタッフ登録」ボタンをクリックします</li>
+                <li>登録フォームが表示されます</li>
+                <li>必須項目を入力します：
+                    <ul style="margin-top: 10px;">
+                        <li>氏名</li>
+                        <li>性別</li>
+                        <li>メールアドレス</li>
+                        <li>パスワードはデフォルト<code>wtwst</code>が自動設定</li>
+                    </ul>
+                </li>
+                <li>追加項目を入力します：
+                    <ul style="margin-top: 10px;">
+                        <li>年齢</li>
+                        <li>生年月日</li>
+                        <li>電話番号</li>
+                        <li>住所、最寄り駅</li>
+                        <li>銀行口座情報</li>
+                        <li>緊急連絡先</li>
+                        <li>経験タグ、備考（管理者用）</li>
+                        など
+                    </ul>
+                </li>
+                <li>「登録」ボタンをクリックして保存します</li>
+            </ol>
+            <img src=".\add_stuff.png" height="400px">
+
+            
+            <div class="note">
+                <strong>注意：</strong> バックエンドでの登録時はパスワードが共通です。スタッフには登録したメールアドレスとデフォルトのパスワードでログインするよう通知してください。ログイン後、スタッフは自分で詳細プロフィールを編集できます。
+            </div>
+            
+            <h3 id="staff-csv">4.2 CSV一括登録</h3>
+            
+            <p>従来のGoogleフォーム形式でのスタッフ登録情報を引っ越しする場合や、複数のスタッフを一度に登録する場合、CSVファイルを使用すると効率的です。</p>
+            
+            <ol class="step-list">
+                <li>スタッフ管理画面で「CSVから一括登録」ボタンをクリックします</li>
+                <li>一括登録ダイアログが開きます</li>
+                <li>Googleフォームの回答結果をCSVで保存します。</li>
+                <li>「ファイルを選択」ボタンで、作成したCSVファイルをアップロードします<br>
+                    またはドラッグ&ドロップエリアにファイルをドロップします</li>
+                <li>プレビューで内容を確認します</li>
+                <li>「インポート」ボタンをクリックして登録します</li>
+                <li>登録結果（成功件数、失敗件数）が表示されます</li>
+            </ol>
+            
+            <img src=".\add_csv.png" height="400px">
+            
+            <h4>CSVファイルの形式</h4>
+            <table>
+                <tr>
+                    <th>列名</th>
+                    <th>必須</th>
+                    <th>説明</th>
+                    <th>例</th>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>✓</td>
+                    <td>スタッフ氏名</td>
+                    <td>山田太郎</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>✓</td>
+                    <td>メールアドレス（ログインID兼用）</td>
+                    <td>yamada@example.com</td>
+                </tr>
+                <tr>
+                    <td>gender</td>
+                    <td>✓</td>
+                    <td>性別（男性、女性、その他）</td>
+                    <td>男性</td>
+                </tr>
+                <tr>
+                    <td>phone</td>
+                    <td></td>
+                    <td>電話番号</td>
+                    <td>090-1234-5678</td>
+                </tr>
+                <tr>
+                    <td>address</td>
+                    <td></td>
+                    <td>住所</td>
+                    <td>東京都渋谷区...</td>
+                </tr>
+            </table>
+            その他、既存のGoogleフォームの項目に準拠。CSVに項目が存在しない場合は空のまま登録されます。
+            <div class="important">
+                <strong>重要：</strong> CSV一括登録時、パスワードは自動的に <code>wtwst</code> に設定されます。登録後、スタッフは初回ログイン時にパスワード変更画面に遷移します。
+            </div>
+            
+            <h3 id="staff-edit">4.3 スタッフ情報編集（タブ式）</h3>
+            
+            <p>スタッフ情報は、5つのタブに分かれた編集画面で管理できます。</p>
+            
+            <ol class="step-list">
+                <li>スタッフ一覧から編集したいスタッフカードをクリックします</li>
+                <li>スタッフ詳細ダイアログが開きます</li>
+                <li>詳細ダイアログには2つのモードがあります：
+                    <ul style="margin-top: 10px;">
+                        <li><strong>詳細表示モード：</strong> 情報の閲覧（5つのタブ）</li>
+                        <li><strong>編集モード：</strong> 情報の編集（5つのタブ）</li>
+                    </ul>
+                </li>
+                <li>編集する場合は、ダイアログ内の「編集」ボタンをクリックします</li>
+                <li>編集画面では以下の5つのタブが表示されます：
+                    <ul style="margin-top: 10px;">
+                        <li><strong>基本情報：</strong> 氏名、性別、年齢、生年月日、メール、電話番号</li>
+                        <li><strong>住所・連絡先：</strong> 住所、最寄り駅、地域</li>
+                        <li><strong>銀行口座：</strong> 銀行名、支店名、口座種別、口座番号、口座名義</li>
+                        <li><strong>経験・アサイン：</strong> スキル、経験履歴、稼働日数、アサイン履歴</li>
+                        <li><strong>管理者用：</strong> 経験タグ、備考、ランク設定（管理者のみ編集可能）</li>
+                    </ul>
+                </li>
+                <li>必要なタブに切り替えて情報を編集します</li>
+                <li>「保存」ボタンをクリックして変更を確定します</li>
+            </ol>
+            
+            
+            <div class="tip">
+                <strong>ヒント：</strong> 「経験・アサイン」タブでは、スタッフの過去のアサイン履歴を役職別に確認できます。また、累計稼働日数も表示されます。
+            </div>
+            
+            <h3 id="staff-profile-image">4.4 プロフィール画像設定</h3>
+            
+            <p>スタッフのプロフィール画像は、スタッフ自身がマイページで設定できます。管理者は画像を確認・削除できます。</p>
+            
+            <h4>スタッフ自身が設定する場合（マイページ）</h4>
+            <ol class="step-list">
+                <li>スタッフがログイン後、「マイページ」メニューをクリックします</li>
+                <li>プロフィール編集画面が表示されます</li>
+                <li>プロフィール画像エリアの「画像を選択」ボタンをクリックします</li>
+                <li>画像ファイルを選択してアップロードします</li>
+                <li>「保存」ボタンで確定します</li>
+            </ol>
+            
+            <div class="tip">
+                <strong>ヒント：</strong> プロフィール画像は、案件アサイン時やスタッフ一覧、スタッフカードで表示され、識別しやすくなります。推奨サイズは400x400ピクセル程度、ファイルサイズは5MB以下です。
+            </div>
+            
+            <h3 id="staff-rank">4.5 ランクシステム</h3>
+            <img src=".\rank_pre.png" height="350px">
+            <p>勤務経験に応じたスタッフのランク分け制度に対応。</br>
+                ランクに応じたデザインのネームプレートに総勤務日数や登録年月日を表示することでスタッフとしての所属意識を向上させます。
+                </br>スタッフのランクは、稼働日数に基づいて自動的に計算される処理は搭載していますが、ランクの変更は管理者が手動で変更するようにしています。</p>
+            
+            <h4>ランク一覧</h4>
+            <table>
+                <tr>
+                    <th>ランク</th>
+                    <th>稼働日数の目安(適当)</th>
+                    <th>表示色</th>
+                    <th>説明</th>
+                </tr>
+                <tr>
+                    <td>ブルー</td>
+                    <td>0〜29日</td>
+                    <td>青</td>
+                    <td>新人スタッフ。日払い50%</td>
+                </tr>
+                <tr>
+                    <td>ブロンズ</td>
+                    <td>30〜59日</td>
+                    <td>銅</td>
+                    <td>信頼を獲得。日払い全額</td>
+                </tr>
+                <tr>
+                    <td>シルバー</td>
+                    <td>60〜149日</td>
+                    <td>銀</td>
+                    <td>中堅スタッフ。日払い手数料免除</td>
+                </tr>
+                <tr>
+                    <td>ゴールド</td>
+                    <td>150〜299日</td>
+                    <td>金</td>
+                    <td>上級スタッフ。前払いもしちゃうかも</td>
+                </tr>
+                <tr>
+                    <td>プラチナ</td>
+                    <td>300日以上</td>
+                    <td>プラチナ</td>
+                    <td>何でもするから頼むから在籍し続けてほしい</td>
+                </tr>
+            </table>
+            
+            <h4>稼働日数の計算方法</h4>
+            <p>稼働日数は、<strong>確定済み</strong>案件のアサイン情報から自動計算されます。案件を「確定」ステータスにすると、その案件の日数が各スタッフの稼働日数に加算されます。</p>
+            
+            <h4>手動でランクを変更する</h4>
+            <ol class="step-list">
+                <li>スタッフ詳細画面を開き、「編集」ボタンをクリックします</li>
+                <li>「管理者用」タブに切り替えます</li>
+                <li>「ランク」ドロップダウンから変更したいランクを選択します</li>
+                <li>「保存」ボタンで確定します</li>
+            </ol>
+            
+            <div class="note">
+                <strong>注意：</strong> 手動で設定したランクは、稼働日数による自動更新では上書きされません。特別な理由でランクを調整したい場合にのみ使用してください。
+            </div>
+            
+            <h4>スタッフダッシュボードでの表示</h4>
+            <p>スタッフ自身のダッシュボードには、メタリックなクレジットカード風のプロフィールカードが表示され、ランクに応じたグラデーション背景色で視覚的に識別できます。</p>
+            
+            <img src=".\rank.png" height="350px">
+        </div>
+        
+        <div class="section" id="project-management">
+            <h2>5. 案件管理</h2>
+            
+            <h3 id="project-create">5.1 案件作成</h3>
+            
+            <ol class="step-list">
+                <li>サイドメニューから「案件管理」をクリックします</li>
+                <li>「新規案件登録」ボタンをクリックします</li>
+                <li>案件の基本情報を入力します：
+                    <ul style="margin-top: 10px;">
+                        <li>案件名（必須）</li>
+                        <li>場所</li>
+                        <li>概要（改行を使って複数行で記述可能）</li>
+                        <li>ステータス（アサイン中、確定、完了、キャンセル）</li>
+                    </ul>
+                </li>
+                <li>募集要項（役職）を追加します</li>
+            </ol>
+            
+
+            <img src=".\edit.png" height="380px">
+            
+            <div class="tip">
+                <strong>ヒント：</strong> 概要欄で改行を使うと、エントリー画面やスタッフダッシュボードでも改行が保持されて表示されます。文章中にあるURLのハイパーリンク認識はされていないので今後のアップデートで対応予定です。
+            </div>
+            
+            <h3 id="project-payment-types">5.2 支払いタイプ（日給・時給）</h3>
+            
+            <p>案件の各役職には、2種類の支払いタイプを設定できます。</p>
+            
+            <h4>日給タイプ</h4>
+            <p><strong>固定の日給額×日数</strong>で計算されます。</p>
+            
+            <ul>
+                <li><strong>設定項目：</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>役職名（ディレクター、イベントスタッフ、MC、その他）</li>
+                        <li>カスタム役職名（「その他」選択時）</li>
+                        <li>開始日・終了日（カレンダーから選択）</li>
+                        <li>日給額（例: 10,000円）</li>
+                        <li>日数（0.5日単位で入力可能、例: 2.5日）</li>
+                        <li>募集人数</li>
+                    </ul>
+                </li>
+                <li><strong>計算式：</strong> 報酬額 = 日給額 × 日数</li>
+                <li><strong>例：</strong> 日給10,000円 × 2.5日 = 25,000円</li>
+            </ul>
+            
+
+            <img src=".\nikkyu.png" height="350px">
+            
+            <h4>時給タイプ</h4>
+            <p><strong>時給額×合計時間</strong>で計算されます。スケジュール設定が必要です。</p>
+            
+            <ul>
+                <li><strong>設定項目：</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>役職名、カスタム役職名</li>
+                        <li>開始日・終了日（カレンダーから選択）</li>
+                        <li>時給額（例: 1,500円）</li>
+                        <li>スケジュールモード（シンプル または カスタム）</li>
+                        <li>開始時刻・終了時刻（モードによって異なる）</li>
+                        <li>募集人数</li>
+                    </ul>
+                </li>
+                <li><strong>計算式：</strong> 報酬額 = 時給額 × 合計時間</li>
+                <li><strong>例：</strong> 時給1,500円 × 16時間 = 24,000円</li>
+            </ul>
+            
+
+            <img src=".\jikyu.png" height="450px">
+            
+            <h4>支払いタイプの比較</h4>
+            <table>
+                <tr>
+                    <th>項目</th>
+                    <th>日給</th>
+                    <th>時給</th>
+                </tr>
+                <tr>
+                    <td>設定項目</td>
+                    <td>日給額、日数</td>
+                    <td>時給額、スケジュール</td>
+                </tr>
+                <tr>
+                    <td>計算方法</td>
+                    <td>日給額 × 日数</td>
+                    <td>時給額 × 合計時間</td>
+                </tr>
+                <tr>
+                    <td>スケジュール設定</td>
+                    <td>不要</td>
+                    <td>必須</td>
+                </tr>
+                <tr>
+                    <td>小数点入力</td>
+                    <td>可（例: 2.5日）</td>
+                    <td>時刻で管理</td>
+                </tr>
+                <tr>
+                    <td>適用シーン</td>
+                    <td>日単位の業務</td>
+                    <td>時間単位の業務</td>
+                </tr>
+            </table>
+            
+            <h3 id="project-schedule">5.3 スケジュール設定（シンプル・カスタムモード）</h3>
+            
+            <p>時給タイプを選択した場合、2つのスケジュール設定モードから選択できます。</p>
+            
+            <h4>シンプルモード</h4>
+            <p>すべての日で<strong>同じ開始・終了時刻</strong>を設定します。</p>
+            
+            <ol class="step-list">
+                <li>スケジュール設定エリアで「シンプル」ボタンをクリックします</li>
+                <li>開始時刻を入力します（例: 09:00）</li>
+                <li>終了時刻を入力します（例: 18:00）</li>
+                <li>システムが自動的に、開始日から終了日までの各日に同じ時刻でスケジュールを生成します</li>
+            </ol>
+            
+
+            <img src=".\type_simple.png" height="450px">
+            
+            <p><strong>例：</strong></p>
+            <ul>
+                <li>開始日: 2025年11月15日</li>
+                <li>終了日: 2025年11月16日</li>
+                <li>開始時刻: 09:00</li>
+                <li>終了時刻: 18:00</li>
+                <li>→ 2日間とも09:00〜18:00（各8時間、合計16時間）</li>
+            </ul>
+            
+            <h4>カスタムモード</h4>
+            <p><strong>日ごとに異なる開始・終了時刻</strong>を設定できます。</p>
+            
+            <ol class="step-list">
+                <li>スケジュール設定エリアで「カスタム」ボタンをクリックします</li>
+                <li>「+ スケジュール追加」ボタンをクリックします</li>
+                <li>各スケジュールに以下を入力します：
+                    <ul style="margin-top: 10px;">
+                        <li>日付（カレンダーから選択）</li>
+                        <li>開始時刻（例: 10:00）</li>
+                        <li>終了時刻（例: 15:00）</li>
+                    </ul>
+                </li>
+                <li>必要な数だけスケジュールを追加します</li>
+                <li>不要なスケジュールは「削除」ボタンで削除できます</li>
+            </ol>
+            
+            <img src=".\type.png" height="450px">
+
+            
+            <p><strong>例：</strong></p>
+            <ul>
+                <li>11月15日: 09:00〜18:00（8時間）</li>
+                <li>11月16日: 10:00〜14:00（4時間）</li>
+                <li>11月17日: 13:00〜19:00（6時間）</li>
+                <li>→ 合計18時間</li>
+            </ul>
+            
+            <h4>スケジュールモードの選び方</h4>
+            <table>
+                <tr>
+                    <th>状況</th>
+                    <th>推奨モード</th>
+                    <th>理由</th>
+                </tr>
+                <tr>
+                    <td>毎日同じ時間帯で勤務</td>
+                    <td>シンプル</td>
+                    <td>設定が簡単で、変更も一括で可能</td>
+                </tr>
+                <tr>
+                    <td>日によって時間帯が異なる</td>
+                    <td>カスタム</td>
+                    <td>柔軟に各日の時刻を設定できる</td>
+                </tr>
+                <tr>
+                    <td>前日設営だけ短時間</td>
+                    <td>カスタム</td>
+                    <td>特定の日だけ時刻を変更できる</td>
+                </tr>
+            </table>
+            
+            <div class="important">
+                <strong>重要：</strong> スケジュールを設定すると、合計時間が自動計算され、報酬額（時給×合計時間）が計算されます。(スタッフには提示されません) スケジュールを変更すると、報酬額も自動的に再計算されます。
+            </div>
+            
+            <h3 id="project-edit">5.4 案件編集</h3>
+            
+            <ol class="step-list">
+                <li>案件一覧から編集したい案件カードをクリックします</li>
+                <li>案件詳細ダイアログが開きます</li>
+                <li>「編集」ボタンをクリックします</li>
+                <li>必要な項目を変更します</li>
+                <li>「保存」ボタンで変更を確定します</li>
+            </ol>
+            
+            <div class="important">
+                <strong>重要：</strong> 案件編集後、保存してから再度編集画面を開いても、入力した日付や金額が正しく保持されます。以前のバージョンで発生していた「保存後に値がリセットされる」問題は修正されています。
+            </div>
+            
+            <div class="note">
+                <strong>注意：</strong> 未保存の変更がある状態で編集ダイアログを閉じようとすると、確認ダイアログが表示されます。誤ってデータを失うことを防ぐための機能です。
+            </div>
+            
+            <h3 id="project-assign">5.5 スタッフアサイン</h3>
+            
+            <p>案件にスタッフをアサインする方法は2つあります。</p>
+            
+            <h4>方法1: 案件詳細から直接アサイン</h4>
+            <ol class="step-list">
+                <li>案件詳細ダイアログを開きます</li>
+                <li>検索ボックスでスタッフを検索します（名前、地域、備考で検索可能）</li>
+                <li>アサインしたいスタッフにチェックを入れます</li>
+                <li>募集人数の範囲内で複数スタッフを選択できます</li>
+                <li>「アサイン」ボタンで確定します</li>
+            </ol>
+            
+            <img src=".\stuff_assign.png" height="380px">
+            
+            <div class="tip">
+                <strong>ヒント：</strong> アサインダイアログでは、各スタッフのランク、稼働日数、経験タグが表示されるため、適切なスタッフを選びやすくなっています。
+            </div>
+            
+            <h4>方法2: エントリー管理からアサイン</h4>
+            <ol class="step-list">
+                <li>「エントリー管理」メニューを開きます</li>
+                <li>エントリー一覧から承認したいエントリーを確認します</li>
+                <li>「アサイン」ボタンをクリックすると、自動的にアサインされます</li>
+            </ol>
+            
+            <h4>募集人数の管理</h4>
+            <p>各役職には募集人数が設定されています。確定済みステータスでアサイン済みのスタッフ数が募集人数に達すると、以下の動作になります：</p>
+            <ul>
+                <li>アサインダイアログで新たにスタッフを選択できなくなります</li>
+                <li>エントリー管理で、その役職へのエントリーは自動的に「募集終了」と表示されます</li>
+            </ul>
+            
+            <h3 id="project-confirm">5.6 案件確定</h3>
+            
+            <p>すべてのスタッフアサインが完了したら、案件を「確定」状態に変更します。</p>
+            
+            <ol class="step-list">
+                <li>案件詳細ダイアログを開きます</li>
+                <li>「編集」ボタンをクリックします</li>
+                <li>ステータスを「確定」に変更します</li>
+                <li>「保存」ボタンで確定します</li>
+            </ol>
+            
+            <div class="important">
+                <strong>重要：</strong> 案件を「確定」にすると、以下の処理が自動的に行われます：
+                <ul style="margin-top: 10px;">
+                    <li>アサインされたスタッフの稼働日数が加算されます</li>
+                    <s><li>稼働日数に応じてランクが自動更新される可能性があります</s>    ←現在無効化</li>
+                    <li>スタッフのダッシュボードに「確定済み」として表示されます</li>
+                </ul>
+                確定後も編集は可能ですが、稼働日数の計算に影響するため、慎重に行ってください。
+            </div>
+            
+            <h4>案件ステータスの意味</h4>
+            <table>
+                <tr>
+                    <th>ステータス</th>
+                    <th>説明</th>
+                    <th>スタッフへの影響</th>
+                </tr>
+                <tr>
+                    <td>アサイン中</td>
+                    <td>スタッフの募集・アサインを行っている段階</td>
+                    <td>稼働日数に加算されない</td>
+                </tr>
+                <tr>
+                    <td>確定</td>
+                    <td>すべてのスタッフが確定し、実施予定の案件</td>
+                    <td>稼働日数に加算される</td>
+                </tr>
+                <tr>
+                    <td>終了</br>(内部処理)</td>
+                    <td>イベントが終了し、業務が完了した案件</td>
+                    <td>終了報告の提出が可能になる</td>
+                </tr>
+                <tr>
+                    <td>失注</td>
+                    <td>中止またはキャンセルされた案件</td>
+                    <td>稼働日数から除外される。</br>バックエンド管理側のカレンダーには残る</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="section" id="entry-management">
+            <h2>6. エントリー管理</h2>
+            
+            <p>スタッフが案件にエントリーすると、管理者はエントリー管理画面で確認・承認できます。</p>
+            
+            <h3>6.1 エントリーシステムの流れ</h3>
+            <ol class="step-list">
+                <li>管理者がエントリーURLを発行して案件を展開します</li>
+                <li>スタッフがエントリーURLから案件を確認します</li>
+                <li>スタッフが希望する役職にエントリーします</li>
+                <li>管理者がエントリー管理画面で確認します</li>
+                <li>管理者が承認または却下します</li>
+                <li>承認された場合、自動的にスタッフがアサインされます。案件ステータスを確定にしない限りスタッフ側の画面ではエントリー中のままになります</li>
+            </ol>
+            
+            <img src=".\assign_button.png" height="350px">
+                     
+
+            
+            <h3>6.2 URL-based Project Entry System(エントリURL)</h3>
+            
+            <p>スタッフは、専用のエントリーURLから直接案件にエントリーできます。</p>
+            
+            <ol class="step-list">
+                <li>案件詳細画面で「エントリーURL」をコピーします</li>
+                <li>URLを公式LINEでスタッフに共有します。(案件の見出し+URL　全文は載せない。)</li>
+                <li>スタッフがURLにアクセスすると、その案件のエントリー画面が表示されます</li>
+                <li>スタッフがログインしていない場合、ログイン画面が表示されます</li>
+                <li>スタッフが希望する役職を選択してエントリーします</li>
+                <li>エントリーが完了するとスタッフ側のダッシュボードには「エントリー済み」と案件がリスト表示されます</li>
+            </ol>
+            <img src=".\entry.png" height="350px">
+            <div class="tip">
+                <strong>ヒント：</strong> エントリーURLには案件IDが含まれており、スタッフは何度でもアクセスできます。
+            </div>
+        </div>
+        
+        <div class="section" id="work-reports">
+            <h2>7. 終了報告の確認・承認</h2>
+            
+            <p>案件完了後、スタッフが提出した終了報告を確認し、経費などの承認を行います。</p>
+            
+            <h3>7.1 終了報告一覧の確認</h3>
+            
+            <ol class="step-list">
+                <li>サイドメニューから「終了報告」をクリックします</li>
+                <li>提出された終了報告の一覧が表示されます</li>
+                <li>各報告には以下の情報が表示されます：
+                    <ul style="margin-top: 10px;">
+                        <li>案件名</li>
+                        <li>スタッフ名</li>
+                        <li>役職</li>
+                        <li>提出日時</li>
+                        <li>ステータス(提出人数)</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <img src=".\report.png" height="380px">
+            
+            <h3>7.2 報告内容の詳細確認</h3>
+            
+            <ol class="step-list">
+                <li>確認したい報告をクリックします</li>
+                <li>報告詳細ダイアログが開き、以下の情報を確認できます：
+                    <ul style="margin-top: 10px;">
+                        
+                        <li><strong>実際の勤務時間：</strong> 開始時刻と終了時刻（時給の場合）</li>
+                        <li><strong>経費項目の選択：</strong>
+                            <ul style="margin-top: 5px;">
+                                ・ 交通費</br>
+                                ・ 駐車場</br>
+                                ・ 宿泊費</br>
+                                ・ その他</br>
+                            </ul>
+                        </li>
+                        <li><strong>経費の説明：</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>内容(経路・宿泊先・物品名など)</br>→領収書の添付はLINEで送信 or GoogleドライブなどにアップロードしてURLをここに貼る。</li>
+                                <li>金額</li>
+                            </ul>
+                        </li>
+                        <li><strong>備考：</strong> その他の特記事項</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <img src=".\report_list.png" height="450px">
+            
+            <div class="tip">
+                <strong>ヒント：</strong> 経費の詳細情報は、管理者のみが閲覧できます。交通費の経路、領収書の有無、金額などが明確に表示されるため、精算処理に活用できます。確認事項や間違いがある場合はLINEでスタッフに問い合わせてください。
+            </div>
+            
+            <h3>7.3 報告の承認</h3>
+            
+            <h4>承認処理</h4>
+            <ol class="step-list">
+                <li>報告詳細画面で「承認」ボタンをクリックします。</li>
+                <li>確認ダイアログで「はい」を選択します。</li>
+                <li>承認完了後、全ての報告が承認された案件はアーカイブされます。</li>
+                <li>未提出者が残っている案件は未チェック欄に残り続けます。</li>
+            </ol>
+            
+            
+            <div class="note">
+                <strong>今後のアップデート：</strong> 不備があった際の差し戻しやスタッフ側での未承認報告の再編集を実装予定です。
+            </div>
+        </div>
+        
+        <div class="section" id="sales-report">
+            <h2>8. 売上レポート</h2>
+            
+            <p>月次の売上レポートを生成し、案件別・役職別の支払額を確認できます。</p>
+            
+            <h3>8.1 売上レポートの生成</h3>
+            
+            <ol class="step-list">
+                <li>サイドメニューから「売上レポート」をクリックします</li>
+                <li>レポート生成画面が表示されます</li>
+                <li>対象年月を選択します（年と月をドロップダウンから選択）</li>
+                <li>「レポート生成」ボタンをクリックします</li>
+                <li>指定した月の売上データが表示されます</li>
+            </ol>
+            
+            <img src=".\log.png" height="450px">
+            
+            <h3>8.2 レポート内容</h3>
+            
+            <p>生成されたレポートには以下の情報が含まれます：</p>
+            
+            <table>
+                <tr>
+                    <th>項目</th>
+                    <th>説明</th>
+                </tr>
+                <tr>
+                    <td>案件名/案件ID</td>
+                    <td>対象月に実施された案件</td>
+                </tr>
+                <tr>
+                    <td>役職名</td>
+                    <td>募集要項の役職</td>
+                </tr>
+                <tr>
+                    <td>支払いタイプ</td>
+                    <td>日給または時給</td>
+                </tr>
+                <tr>
+                    <td>単価</td>
+                    <td>日給額または時給額</td>
+                </tr>
+                <tr>
+                    <td>日数/時間</td>
+                    <td>稼働日数（日給の場合）または合計時間（時給の場合）</td>
+                </tr>
+                <tr>
+                    <td>支払額</td>
+                    <td>計算された支払額（単価 × 日数/時間）</td>
+                </tr>
+                <tr>
+                    <td>案件金額</td>
+                    <td>その役職の総額（単価 × 日数/時間 × 募集人数）</td>
+                </tr>
+            </table>
+            
+            <h4>レポートの集計方法</h4>
+            <ul>
+                <li><strong>日給の場合：</strong> 日給額 × 日数 = 支払額</li>
+                <li><strong>時給の場合：</strong> 時給額 × 合計時間 = 支払額</li>
+                <li><strong>案件金額：</strong> 各役職の支払額 × その役職の募集人数</li>
+                <li><strong>月次合計：</strong> すべての案件の支払額を合計</li>
+            </ul>
+            <div class="note">
+                <strong>注意：</strong> 時給の場合、現時点では休憩時間が考慮されていません。終了報告などと連携できるようにする予定です。
+            </div>
+            
+            <h3>8.3 CSVエクスポート</h3>
+            
+            <ol class="step-list">
+                <li>売上レポート画面で「CSVエクスポート」ボタンをクリックします</li>
+                <li>CSVファイルがダウンロードされます</li>
+                <li>ファイル名は「売上レポート_YYYY_MM.csv」形式になります</li>
+            </ol>
+            
+            <div class="tip">
+                <strong>ヒント：</strong> 売上レポート機能は制作途中のためすべての案件情報がCSVファイルに記載されていません。今後、アサインしたスタッフ名などを追加したり、必要な情報だけをフィルターして出力できるようにする予定です。
+            </div>
+            
+            <h4>CSVファイルの形式</h4>
+            <table>
+                <tr>
+                    <th>列名</th>
+                    <th>説明</th>
+                </tr>
+                <tr>
+                    <td>案件名</td>
+                    <td>プロジェクト名</td>
+                </tr>
+                <tr>
+                    <td>役職名</td>
+                    <td>役職または職種</td>
+                </tr>
+                <tr>
+                    <td>スタッフ名</td>
+                    <td>担当スタッフ名</td>
+                </tr>
+                <tr>
+                    <td>支払いタイプ</td>
+                    <td>日給 or 時給</td>
+                </tr>
+                <tr>
+                    <td>単価</td>
+                    <td>金額（円）</td>
+                </tr>
+                <tr>
+                    <td>日数/時間</td>
+                    <td>稼働実績</td>
+                </tr>
+                <tr>
+                    <td>支払額</td>
+                    <td>計算された金額（円）</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="section" id="other-features">
+            <h2>9. その他の機能</h2>
+            
+            <h3>9.1 求人掲示板【現在無効化】</h3>
+            
+            <p>スタッフ向けに求人情報を展開できます。</p>
+            <div class="note">
+                <strong>注意：</strong> 公式LINEとのハイブリッド運用のため現在は求人掲示板は無効化されています。完全内製化が進み、LINEを廃止する際にこの機能を使用する予定です。
+            </div>
+            
+            <ol class="step-list">
+                <li>案件詳細画面で「募集呼びかけ」ボタンをクリックします</li>
+                <li>投稿内容を編集します：
+                    <ul style="margin-top: 10px;">
+                        <li>タイトル（案件名が自動入力）</li>
+                        <li>説明（案件概要と募集要項が自動入力）</li>
+                        <li>応募締切日</li>
+                        <li>対象スタッフ（全員または特定スタッフを選択）</li>
+                    </ul>
+                </li>
+                <li>「投稿」ボタンで公開します</li>
+                <li>投稿された求人は、スタッフのダッシュボードに表示されます</li>
+            </ol>
+            
+            <div class="note">
+                <strong>備考：</strong> 求人掲示板に投稿すると、対象スタッフのダッシュボードに表示されます。スタッフはそこから案件にエントリーできます。
+            </div>
+            
+            <h3>9.2 ダイレクトメッセージ</h3>
+            
+            <p>特定のスタッフに個別メッセージを送信できます。</p>
+            
+            <ol class="step-list">
+                <li>スタッフ詳細画面で「メッセージ送信」ボタンをクリックします</li>
+                <li>メッセージ内容を入力します</li>
+                <li>「送信」ボタンで送信します</li>
+                <li>スタッフはダッシュボードでメッセージを確認できます</li>
+                <li>スタッフからの返信も同じダイアログで確認できます</li>
+                <div class="note">
+                   <strong>注意：</strong> DMはプッシュ通知機能が現状ないため非推奨です。また、こちらからDMを送らない限りスタッフはDMを開始できません。
+                </div>
+            </ol>
+            
+            <h3>9.3 カレンダービュー</h3>
+            
+            <p>案件を月間カレンダー形式で確認できます。</p>
+            
+            <ol class="step-list">
+                <li>案件管理画面で「カレンダー表示」ボタンをクリックします</li>
+                <li>月間カレンダーに案件がマッピングされます</li>
+                <li>各日付に、その日に実施される案件が表示されます</li>
+                <li>案件をクリックすると詳細が表示されます</li>
+                <li>前月・次月ボタンで月を切り替えられます</li>
+            </ol>
+            
+
+            
+            <div class="tip">
+                <strong>ヒント：</strong> カレンダービューでは、複数の案件が重なっている日が一目で分かります。スタッフのダブルブッキングを防ぐのに役立ちます。
+            </div>
+        </div>
+        
+        <div class="section" id="faq">
+            <h2>10. よくある質問</h2>
+            
+            <h3>Q1. スタッフがパスワードを忘れた場合、パスワードリセットメールも届かない時はどうすればいいですか？</h3>
+            <p>A. 開発管理者がデータベース管理画面から対象のスタッフを編集し、デフォルトパスワードに戻すことができます。この設定を有効にしてデフォルトパスワードでログインすると初回ログイン時と同じ挙動になり新しいパスワードの設定が案内されます。セキュリティのため、LINEなどでスタッフが使用している変更済みのパスワードなどの送信は避けることを推奨します。</p>
+            
+            <h3>Q2. 案件を削除できますか？</h3>
+            <p>A. はい、案件詳細画面の「削除」ボタンから削除できます。ただし、スタッフがアサインされている案件を削除する場合は注意が必要です。削除すると、アサイン情報や稼働日数の計算にも影響します。</p>
+            
+            <h3>Q3. 売上レポートの対象期間を変更できますか？</h3>
+            <p>A. 現在は月単位でのレポート生成に対応しています。年月を選択することで、任意の月のレポートを生成できます。カスタム期間（例: 特定の週）でのレポート生成は、今後のアップデートで対応予定です。</p>
+            
+            <h3>Q4. スタッフのランクを手動で変更した場合、稼働日数によって上書きされますか？</h3>
+            <p>A. 現時点では自動更新を切っているのでこのようなことは発生しませんが、自動更新有効時は手動で変更したランクは、稼働日数による自動更新では上書きされません。ただし、管理者が明示的に変更した場合のみ更新されます。</p>
+            
+            <h3>Q5. 概要欄に画像や添付ファイルを貼り付けることはできますか？</h3>
+            <p>A. 現在、概要欄はテキストのみ対応しています。画像等を共有したい場合は、別途ファイル共有サービスを利用し、URLを概要欄に記載することをお勧めします。</p>
+            
+            <h3>Q6. CSV一括登録時のパスワードは変更できますか？</h3>
+            <p>A. CSV一括登録時のデフォルトパスワードは <code>wtwst</code> で固定です。セキュリティのため、スタッフには初回ログイン後、必ずパスワードを変更するよう案内してください。</p>
+            
+            <h3>Q7. 案件の日程を変更した場合、スタッフに通知されますか？</h3>
+            <p>A. 現在、自動通知機能は実装されていません。重要な変更がある場合は、ダイレクトメッセージ機能や、別途メール・LINEなどで直接連絡することをお勧めします。</p>
+            
+            <h3>Q8. 時給タイプで、休憩時間を設定できますか？</h3>
+            <p>A. 現在、休憩時間の自動計算機能はありません。スケジュール設定時に、休憩時間を考慮した開始・終了時刻を設定してください。例えば、9:00-18:00（休憩1時間）の場合、合計8時間で計算されます。スタッフの案件詳細には時給のみ表示されています。売上管理のために将来的なアップデートで対応予定です。</p>
+            
+            <h3>Q9. 複数の案件に同じスタッフをアサインできますか？</h3>
+            <p>A. はい、可能です。ただし、日程が重複する場合は、カレンダービューで確認して、ダブルブッキングがないよう注意してください。</p>
+            
+            <h3>Q10. プロフィール画像のサイズに制限はありますか？</h3>
+            <p>A. はい、アップロード可能な画像ファイルのサイズは5MB以下です。推奨サイズは400x400ピクセル程度の正方形です。対応フォーマットはJPG、PNG、GIFです。</p>
+        </div>
+        
+        <div class="footer">
+            <p>本マニュアルは WTW Event 管理システムの管理者向け操作ガイドです。</p>
+            <p>管理側のマニュアルなので一般スタッフには共有しないでください。</p>
+            <p>ご不明な点がございましたら、システム管理者までお問い合わせください。</p>
+            <p>&copy; 2025 WTW Event. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
